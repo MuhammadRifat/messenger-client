@@ -12,7 +12,7 @@ const Friend = () => {
     useEffect(() => {
         setSpinner(true);
         const email = loggedInUser.email;
-        fetch(`http://localhost:5000/friendsByEmail/${email}`)
+        fetch(`https://pacific-sea-17806.herokuapp.com/friendsByEmail/${email}`)
             .then(res => res.json())
             .then(data => {
                 const friendsEmail = data.map(friend => {
@@ -23,7 +23,7 @@ const Friend = () => {
                         return friend.friend1
                     }
                 });
-                fetch('http://localhost:5000/userByEmails', {
+                fetch('https://pacific-sea-17806.herokuapp.com/userByEmails', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

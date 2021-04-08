@@ -10,11 +10,11 @@ const AddFriends = () => {
     const [spinner, setSpinner] = useState(false);
     useEffect(() => {
         setSpinner(true);
-        fetch('http://localhost:5000/users')
+        fetch('https://pacific-sea-17806.herokuapp.com/users')
             .then(res => res.json())
             .then(documents => {
                 const email = loggedInUser.email;
-                fetch(`http://localhost:5000/friendsByEmail/${email}`)
+                fetch(`https://pacific-sea-17806.herokuapp.com/friendsByEmail/${email}`)
                     .then(res => res.json())
                     .then(data => {
                         const friendsEmail = data.map(friend => {
@@ -25,7 +25,7 @@ const AddFriends = () => {
                                 return friend.friend1
                             }
                         });
-                        fetch('http://localhost:5000/userByEmails', {
+                        fetch('https://pacific-sea-17806.herokuapp.com/userByEmails', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ const AddFriends = () => {
     const handleAddBtn = (email) => {
         setSpinner(true);
         const friend = { friend1: loggedInUser.email, friend2: email }
-        fetch(`http://localhost:5000/addFriend`, {
+        fetch(`https://pacific-sea-17806.herokuapp.com/addFriend`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

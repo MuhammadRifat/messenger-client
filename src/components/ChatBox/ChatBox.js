@@ -18,11 +18,11 @@ const ChatBox = () => {
     const history = useHistory();
 
     useEffect( () => {
-        fetch(`http://localhost:5000/userById/${id}`)
+        fetch(`https://pacific-sea-17806.herokuapp.com/userById/${id}`)
         .then(res => res.json())
         .then(data => {
             setFriend(data);
-            fetch('http://localhost:5000/chatsByEmails', {
+            fetch('https://pacific-sea-17806.herokuapp.com/chatsByEmails', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -46,7 +46,7 @@ const ChatBox = () => {
             time: new Date(),
             status: 'unseen'
         }
-        fetch('http://localhost:5000/chats', {
+        fetch('https://pacific-sea-17806.herokuapp.com/chats', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

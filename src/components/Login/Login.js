@@ -145,14 +145,14 @@ const Login = () => {
         }
         setLoggedInUser(newUser);
         const email = newUser.email;
-        fetch(`http://localhost:5000/user/${email}`)
+        fetch(`https://pacific-sea-17806.herokuapp.com/user/${email}`)
             .then(res => res.json())
             .then(data => {
                 if (data) {
                     isReplace && history.replace(from);
                 }
                 else {
-                    fetch('http://localhost:5000/addUser', {
+                    fetch('https://pacific-sea-17806.herokuapp.com/addUser', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
