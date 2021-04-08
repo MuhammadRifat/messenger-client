@@ -1,0 +1,17 @@
+.link{
+    text-decoration: none;
+    color: white;
+    margin-right: 40px;
+    margin-top: 7px;
+    font-weight: 600;
+}
+.link:hover{
+    text-decoration: none;
+    color: lightgray;
+}
+#login-btn{
+    background-color: white;
+    border: 2px solid white;
+    padding: 0px 15px;
+    border-radius: 5px;
+}
