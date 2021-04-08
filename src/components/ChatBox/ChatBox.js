@@ -32,7 +32,7 @@ const ChatBox = () => {
             .then(res => res.json())
             .then(documents => setChats(documents))
         });
-    }, [message])
+    })
 
     const handleBlur = (event) => {
         setMessage(event.target.value);
