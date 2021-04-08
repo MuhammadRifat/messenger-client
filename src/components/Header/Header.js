@@ -23,9 +23,9 @@ const Header = () => {
             </Link>
             <div className="ml-auto">
 
-                <Link className="link" to="/chats"><FontAwesomeIcon icon={faEnvelope} className="text-white"/> Chats </Link>
-                <Link className="link" to="/friends"><FontAwesomeIcon icon={faUserFriends} className="text-white"/> Friends </Link>
-                <Link className="link" to="/addFriends"><FontAwesomeIcon icon={faUserPlus} className="text-white"/> Add Friends </Link>
+                <Link className="link" to="/chats"><FontAwesomeIcon icon={faEnvelope} className="text-white" size="2x"/></Link>
+                <Link className="link" to="/friends"><FontAwesomeIcon icon={faUserFriends} className="text-white" size="2x"/></Link>
+                <Link className="link" to="/addFriends"><FontAwesomeIcon icon={faUserPlus} className="text-white" size="2x"/></Link>
                 {/* Dynamically change login button to user image */}
                 {/* {
                     loggedInUser.email ? <Image src={loggedInUser.photo} alt={loggedInUser.name} style={{width:'40px', height:'40px', marginRight:'60px'}} roundedCircle/> : <Link className="link" to="/login"><button id="login-btn">Login</button></Link>
