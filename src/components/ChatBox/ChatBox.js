@@ -12,52 +12,64 @@ import './ChatBox.css';
 const ChatBox = () => {
     const [loggedInUser, setLoggedInUser] = useContext(userContext);
     const [friend, setFriend] = useState({});
-    const [message, setMessage] = useState();
+    const [message, setMessage] = useState('');
     const [chats, setChats] = useState([]);
-    const {id} = useParams();
+    const { id } = useParams();
     const history = useHistory();
 
-    useEffect( () => {
-        fetch(`https://pacific-sea-17806.herokuapp.com/userById/${id}`)
-        .then(res => res.json())
-        .then(data => {
-            setFriend(data);
-            fetch('https://pacific-sea-17806.herokuapp.com/chatsByEmails', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify([loggedInUser.email, data.email])
-            })
+    useEffect(() => {
+        fetch(`https://pacific-sea-17806.herokuapp.com/userById`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: id })
+        })
+            .then(res => res.json())
+            .then(data => {
+                setFriend(data);
+            });
+    }, [id])
+
+    useEffect(() => {
+        fetch('https://pacific-sea-17806.herokuapp.com/chatsByEmails', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify([loggedInUser.email, friend.email])
+        })
             .then(res => res.json())
             .then(documents => setChats(documents))
-        });
     })
 
     const handleBlur = (event) => {
         setMessage(event.target.value);
     }
 
-    const handleSendBtn = () => {
-        const chatMessage = {
-            from: loggedInUser.email,
-            to: friend.email,
-            message: message,
-            time: new Date(),
-            status: 'unseen'
-        }
-        fetch('https://pacific-sea-17806.herokuapp.com/chats', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(chatMessage)
-        })
-        .then(res => {
-            if(res){
-                document.getElementById('message').value = "";
+    const handleSendBtn = (e) => {
+        e.preventDefault();
+        document.getElementById('message').value = "";
+        if (message.length) {
+            const chatMessage = {
+                from: loggedInUser.email,
+                to: friend.email,
+                message: message,
+                time: new Date(),
+                status: 'unseen'
             }
-        })
+            fetch('https://pacific-sea-17806.herokuapp.com/chats', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(chatMessage)
+            })
+                .then(res => {
+                    if (res) {
+                        setMessage('');
+                    }
+                })
+        }
+
     }
 
     return (
@@ -66,9 +78,9 @@ const ChatBox = () => {
                 <Col md={8} className="bg-white">
                     <Row className="justify-content-md-center fixed-top pl-3 pr-3">
                         <Col md={6} className="d-flex p-2 header">
-                        <button className="btn" onClick={() => history.goBack()}><FontAwesomeIcon icon={faArrowLeft} className="text-white"/></button>
-                        <h5 className="text-white mt-2 ml-5">{friend?.name}</h5>
-                        <Image className="ml-auto" width="50" height="50" src={friend?.photo || profilePic} alt="" roundedCircle/>
+                            <button className="btn" onClick={() => history.goBack()}><FontAwesomeIcon icon={faArrowLeft} className="text-white" /></button>
+                            <h5 className="text-white mt-2 ml-5">{friend?.name}</h5>
+                            <Image className="ml-auto" width="50" height="50" src={friend?.photo || profilePic} alt="" roundedCircle />
                         </Col>
                     </Row>
                     <div className="mt-5 pt-3">

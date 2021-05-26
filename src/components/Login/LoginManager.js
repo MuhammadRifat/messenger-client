@@ -3,71 +3,72 @@ import "firebase/auth";
 import firebaseConfig from "./firebase.config";
 
 export const firebaseConfigFrameWork = () => {
-    if(!firebase.apps.length){
-        firebase.initializeApp(firebaseConfig);
-    }
-    else{
-        firebase.app();
-    }
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  else {
+    firebase.app();
+  }
 }
 
 // Google sign in
 export const handleGoogleSignIn = () => {
-    const googleProvider = new firebase.auth.GoogleAuthProvider();
-    return firebase.auth()
-  .signInWithPopup(googleProvider)
-  .then((result) => {
-    const user = result.user;
-    return user;
-  }).catch((error) => {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.log(errorMessage);
-  });
+  const googleProvider = new firebase.auth.GoogleAuthProvider();
+  return firebase.auth()
+    .signInWithPopup(googleProvider)
+    .then((result) => {
+      const user = result.user;
+      setUserToken();
+      return user;
+    }).catch((error) => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorMessage);
+    });
 }
 
 // Facebook sign in
 export const handleFbSignIn = () => {
-    const fbProvider = new firebase.auth.FacebookAuthProvider();
-    return firebase
-  .auth()
-  .signInWithPopup(fbProvider)
-  .then((result) => {
-    const user = result.user;
-    return user;
-  })
-  .catch((error) => {
-    const errorMessage = error.message;
-    return errorMessage;
-  });
+  const fbProvider = new firebase.auth.FacebookAuthProvider();
+  return firebase
+    .auth()
+    .signInWithPopup(fbProvider)
+    .then((result) => {
+      const user = result.user;
+      return user;
+    })
+    .catch((error) => {
+      const errorMessage = error.message;
+      return errorMessage;
+    });
 }
 
 // For user login
 export const handleLogIn = (email, password) => {
   return firebase.auth().signInWithEmailAndPassword(email, password)
-  .then((userCredential) => {
-    const user = userCredential.user;
-    return user;
-  })
-  .catch((error) => {
-    const errorMessage = error.message;
-    return errorMessage;
-  });
+    .then((userCredential) => {
+      const user = userCredential.user;
+      return user;
+    })
+    .catch((error) => {
+      const errorMessage = error.message;
+      return errorMessage;
+    });
 }
 
 // For manually user sign up
 export const handleSignUp = (name, email, password) => {
   return firebase.auth().createUserWithEmailAndPassword(email, password)
-  .then((userCredential) => { 
-    updateUserName(name);
-    const user = userCredential.user;
-    return user;
-  })
-  .catch((error) => {
-    const errorMessage = error.message;
-    return errorMessage;
-  });
+    .then((userCredential) => {
+      updateUserName(name);
+      const user = userCredential.user;
+      return user;
+    })
+    .catch((error) => {
+      const errorMessage = error.message;
+      return errorMessage;
+    });
 }
 
 // update user name
@@ -75,9 +76,17 @@ const updateUserName = name => {
   const user = firebase.auth().currentUser;
   user.updateProfile({
     displayName: name
-    }).then(res => {
-      
-    }).catch(error => {
-      console.log(error);
-    });
+  }).then(res => {
+
+  }).catch(error => {
+    console.log(error);
+  });
+}
+
+const setUserToken = () => {
+  firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
+    sessionStorage.setItem('token', idToken);
+  }).catch(function (error) {
+    // Handle error
+  });
 }

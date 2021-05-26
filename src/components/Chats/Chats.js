@@ -11,7 +11,11 @@ const Chats = () => {
 
     useEffect(() => {
         setSpinner(true);
-        fetch(`https://pacific-sea-17806.herokuapp.com/chatFriends/${loggedInUser.email}`)
+        fetch(`https://pacific-sea-17806.herokuapp.com/chatFriends`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({email: loggedInUser.email})
+        })
             .then(res => res.json())
             .then(data => {
                 fetch('https://pacific-sea-17806.herokuapp.com/userByEmails', {

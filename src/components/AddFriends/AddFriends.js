@@ -10,47 +10,37 @@ const AddFriends = () => {
     const [spinner, setSpinner] = useState(false);
     useEffect(() => {
         setSpinner(true);
-        fetch('https://pacific-sea-17806.herokuapp.com/users')
-            .then(res => res.json())
-            .then(documents => {
-                const email = loggedInUser.email;
-                fetch(`https://pacific-sea-17806.herokuapp.com/friendsByEmail/${email}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        const friendsEmail = data.map(friend => {
-                            if (friend.friend1 === loggedInUser.email) {
-                                return friend.friend2;
-                            }
-                            else {
-                                return friend.friend1
-                            }
-                        });
-                        fetch('https://pacific-sea-17806.herokuapp.com/userByEmails', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(friendsEmail)
-                        })
-                            .then(res => res.json())
-                            .then(data => {
-                                let container = [];
-                                documents.map(user => {
-                                    const newUser = data.find(friend => friend.email === user.email);
-                                    if (!newUser) {
-                                        container = [...container, user];
-                                    }
-                                })
-                                const allUser = container.filter(user => user.email !== loggedInUser.email);
-                                setUsers(allUser);
-                                setSpinner(false);
-                            })
-                    })
+        fetch(`https://pacific-sea-17806.herokuapp.com/friendsByEmail`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({ email: loggedInUser.email})
+        })
+        .then(res => res.json())
+        .then(data => {
+            const friendsEmail = data.map(friend => {
+                if (friend.friend1 === loggedInUser.email) {
+                    return friend.friend2;
+                }
+                else {
+                    return friend.friend1
+                }
+            });
+
+            fetch(`https://pacific-sea-17806.herokuapp.com/usersButNotFriends`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json'},
+                body: JSON.stringify(friendsEmail)
             })
+            .then(res => res.json())
+            .then(result => {
+                const allUser = result.filter(user => user.email !== loggedInUser.email);
+                setUsers(allUser);
+                setSpinner(false);
+            })
+        })
     }, [])
 
     const handleAddBtn = (email) => {
-        setSpinner(true);
         const friend = { friend1: loggedInUser.email, friend2: email }
         fetch(`https://pacific-sea-17806.herokuapp.com/addFriend`, {
             method: 'POST',
@@ -63,7 +53,6 @@ const AddFriends = () => {
                 if (res) {
                     const allUser = users.filter(user => user.email !== email);
                     setUsers(allUser);
-                    setSpinner(false);
                 }
             })
 
